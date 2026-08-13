@@ -1,0 +1,285 @@
+👉 Overview
+In Level 1 – White Belt, your goal is to build your first working Stellar dApp on testnet.
+This level focuses on the core fundamentals of Stellar development: wallets, balances, and transactions. 
+By completing this level, you will learn:
+
+    Connect a Stellar wallet and fund your wallet.
+
+    Balance displays correctly
+
+    Send an XLM transaction on testnet.
+
+Ship a real, deployed application with a public GitHub repository 
+﻿
+📝 Requirements
+Your project must include all items below to successfully complete Level 1.
+1. Wallet Setup
+
+* Set up the Freighter wallet
+
+* Use Stellar Testnet
+
+2. Wallet Connection
+
+* Implement wallet connect functionality
+
+* Implement wallet disconnect functionality
+
+3. Balance Handling
+
+* Fetch the connected wallet’s XLM balance
+
+* Display the balance clearly in the UI
+
+4. Transaction Flow
+
+* Send an XLM transaction on the Stellar testnet
+
+* Show transaction feedback to the user:
+
+* Success or failure state
+
+* Transaction hash or confirmation message
+
+5. Development Standards
+
+* Examples: UI setup, wallet integration, balance fetch, transaction logic, error handling
+
+6. A minimum of 10+ meaningful commits.
+
+﻿
+💭 Project Ideas
+Choose one of the following beginner-friendly ideas or propose your own (as long as all requirements are met):
+
+* Simple Payment dApp - Send XLM to any address with amount input
+
+* Wallet Balance Checker - Display balance for multiple accounts
+
+* Transaction History Viewer - Show recent transactions for the connected wallet
+
+* Testnet Faucet Interface - Request testnet XLM with one click
+
+* Tip Jar Page - Static donation page with QR code
+
+* Split Bill Calculator - Calculate split and send payment
+
+﻿
+Example Repositories
+Review these submissions from previous participants to understand what a successful White Belt project looks like:
+
+* ﻿https://github.com/Halfgork/stellar-frontend-challenge
+
+* ﻿https://github.com/cagatayok/stellar-frontend-challenge
+
+* ﻿https://github.com/benmevic/stellar-airstellar/
+
+* ﻿https://github.com/senemeylulsat/stellarzoneylul
+
+* ﻿https://github.com/talhaaydinn/stellar-frontend-challenge
+
+* ﻿https://github.com/ensar-sencan/ticketverse-nft-platform
+
+﻿
+✅ Submission Checklist
+Your submission must include:
+
+* Public GitHub repository
+
+* A [README.md](http://readme.md/) file
+
+Your README must include:
+
+* Project description
+
+* Setup instructions (how to run locally)
+
+* Screenshots:
+   * Wallet connected state
+   * Balance displayed
+   * Successful testnet transaction
+   * The transaction result is shown to the user
+
+Submit your GitHub repository link below before the monthly deadline.
+You can submit anytime during the month. Earlier submissions will be reviewed first. Estimated time to complete this level is around 1 week.
+
+
+
+
+Help me with some ideas for this
+
+Good challenge — here's how I'd think about picking and scoping this.
+
+## Which project idea to pick
+
+**Best pick for Level 1: Simple Payment dApp**, possibly combined lightly with a "Split Bill Calculator" twist. Reasoning:
+
+- It hits every single requirement in the most direct way — connect, balance, send, feedback — without extra scope.
+- "Balance Checker" and "Transaction History" are weaker choices because they skip the *send* flow unless you bolt it on anyway — so you'd end up building a payment dApp regardless.
+- "Faucet Interface" is the least interesting to reviewers since Friendbot already does that; it doesn't showcase you signing/submitting a real transaction from user funds.
+- "Tip Jar with QR code" is nice polish but thin on its own — good as an *add-on* feature (e.g. add a QR code to your payment dApp so others can tip you), not the whole submission.
+
+So: **Simple Payment dApp**, with a couple of small extras to make it stand out:
+- Add a "recent transactions" panel (pulls from Horizon after each send) — this absorbs the "Transaction History" idea as a bonus feature rather than a separate project.
+- Add a QR code for your own testnet address so people can "tip" you — absorbs the Tip Jar idea.
+
+That way you meet the core requirements cleanly and still look distinctive versus other cookie-cutter payment-only submissions.
+
+## Suggested stack
+
+- **Frontend**: React (Vite) + plain CSS or Tailwind — keep it simple, no need for a backend.
+- **Wallet**: `@stellar/freighter-api` for connect/disconnect/getPublicKey/signTransaction.
+- **Chain interaction**: `@stellar/stellar-sdk` (or `stellar-sdk` depending on current package naming — worth double-checking npm before you start since these packages get renamed/versioned) to build the payment transaction, and Horizon testnet server for balance + submission.
+- **Network**: Testnet only — `https://horizon-testnet.stellar.org`.
+- Deploy static frontend to Vercel/Netlify/GitHub Pages for a live link (not strictly required but nice for the submission).
+
+## Rough build order (maps well to 10+ commits)
+
+1. `chore: scaffold Vite + React app`
+2. `feat: add Freighter connect/disconnect button`
+3. `feat: detect Freighter installed, show install prompt if not`
+4. `feat: fetch and display XLM balance via Horizon`
+5. `feat: build payment form (destination + amount)`
+6. `feat: build and sign payment transaction with Freighter`
+7. `feat: submit transaction to Horizon testnet`
+8. `feat: show success/failure UI with tx hash + explorer link`
+9. `feat: add loading/error states across the flow`
+10. `feat: add recent transactions list`
+11. `style: polish UI`
+12. `docs: write README with setup + screenshots`
+
+That's a natural 10+ meaningful commits rather than one giant dump.
+
+## Things reviewers will likely check closely
+- Real signed transaction (not a mocked "success" message) — use Freighter's `signTransaction`, then submit via Horizon, then show the actual `hash` from the response.
+- Clear success **and** failure states (test what happens when you cancel signing, or send to a bad address).
+- Balance updates after a successful send, not just on page load.
+- README screenshots for all four states listed in the checklist — take these as you build each feature so you don't have to redo the flow at the end.
+
+Want me to sketch out the actual component structure and key code (Freighter connect, balance fetch, transaction build/sign/submit) to get you started?
+
+
+To ensure a fair and high-quality experience, our technical committee selects winners based on a comparative review. Submissions are evaluated by a technical committee using a holistic scoring system. We look for:
+
+* Core Technical Standards: Strong functionality, strict adherence to level requirements, and comprehensive documentation.
+
+* Code Quality & Security: Clean, well-structured, and efficient code. For higher levels, smart contract security and optimization are also key evaluation criteria.
+
+* Ecosystem Fit: Is your project solving a real problem or filling a gap in the Stellar ecosystem? We prioritize projects with high utility.
+
+* User Traction (Levels 5 & 6 & 7): For the Blue,Black Belts and Master belt technical completion is only half the battle. You must demonstrate active user onboarding and real-world interaction with your application.To ensure a high-quality and focused environment, the program follows these core principles:
+﻿
+   * Online & Global: The program is 100% online. You can build, submit, and earn rewards as long as you have an internet connection and a passion for Stellar.
+   * Sequential Progression: You can progress as fast as you can build! However, your "belt chain" must remain unbroken. To be rewarded for a higher belt, you must have successfully met all requirements for the preceding levels.
+   * Monthly Evaluation & Rewards: At the end of each month, our technical committee reviews your progress. You will be eligible for the prize pool of the highest valid level you reached during that month. Once a reward is received for a level, you must move to the next belt to remain eligible for future prizes (except for Master level).
+   * The Infinite Master Belt: Reaching Level 7 is an ongoing achievement. Master Belt can continue to qualify for monthly rewards by shipping major new features and onboarding more real users(Mainnet). There is always room for improvement and scaling.
+   * New & Evolving Projects: You can join with a new idea or an existing project. However, submissions must show significant evolution and meet the specific belt requirements through new progress made during the program period.
+   * Team Collaboration: You are welcome to work as a team; however, please note that prizes are awarded per project/submission, not per individual participant.
+   * Mentor & Market Fit Checkpoint: To ensure your product is ready for the real world, you must receive mentor feedback on both technical soundness and Market Fit before you begin onboarding users. Onboarding users without this strategic review will not count toward your belt progression for Levels 5 and 6.
+   * Pivoting: The core philosophy is progression. We encourage you to "Level Up" one project, but if you need to pivot for better Market Fit, you may transition to a new project in the following month with mentor approval.
+
+Thanks for sharing the judging rubric — it changes the calculus a bit for Level 1, even though "Ecosystem Fit" and "User Traction" formally kick in at higher belts. Since the committee does comparative review from the start, here's how I'd adjust the plan:
+
+## Why this matters for Level 1 specifically
+
+- **Sequential progression** means whatever you build now is likely the seed of your Level 2+ submission. Since submissions must show "significant evolution" over time, picking a payment dApp with a *slightly* real use case (rather than a generic toy) gives you a foundation that can plausibly grow into something with actual ecosystem fit later — rather than a throwaway demo you have to abandon.
+- **Comparative review** at White Belt is still mostly about "did you nail the fundamentals cleanly," but ties will likely go to whoever also shows early signs of intentionality — a clear problem statement in the README, not just "here's a wallet connect demo."
+
+## Adjusted recommendation
+
+Stick with **Simple Payment dApp** as the core (it's the cleanest fit for the hard requirements), but frame it around a narrow, real use case instead of leaving it generic. A few options that could scale into later belts:
+
+- **"SplitStellar"** — split a bill among friends and send each their share; could evolve into a group-expense-tracking app on mainnet by Blue Belt.
+- **"StellarTip"** — a tip jar/QR payment page for creators; could evolve into a lightweight creator-payments tool with recurring/streaming payments later (Stellar has good primitives for this).
+- **"Remit"** — a simple cross-border send demo with an address book; could evolve into a small remittance-style tool, which is a well-worn but genuinely useful Stellar use case.
+
+Any of these still satisfies every Level 1 requirement exactly as before (connect/disconnect, balance, send, feedback) — the only change is naming the problem it solves in your README instead of framing it as a generic "payment demo." That single framing choice costs you nothing extra to build but helps on "Ecosystem Fit" once judges start comparing.
+
+## Documentation quality (since it's explicitly scored)
+
+Given "comprehensive documentation" is called out as a Core Technical Standard, I'd go slightly beyond the minimum README checklist:
+
+- Problem statement (1–2 sentences: what real annoyance does this solve, even in a small way)
+- Architecture note (what talks to what: Freighter → your app → Horizon testnet)
+- Setup instructions that actually work if someone clones cold (env vars, node version, install steps)
+- Screenshots for all four required states, plus maybe a short GIF of the full flow
+- A "Known limitations / what's next" section — this actually helps you at Level 2, since you're expected to show evolution, and it signals to judges you're thinking sequentially rather than one-and-done
+
+Want me to help you pick one of these three narrower concepts and sketch the README structure and component plan around it?
+
+1️⃣ Belt System & Overview
+﻿
+The Stellar Journey to Mastery: Monthly Builder Challenges is a level-based program where developers advance through progressive belt levels by building real applications on Stellar.
+﻿
+Level 
+	
+Level Name
+	
+Focus Topics
+Level 1
+	
+⚪️ White Belt
+	
+Wallets, Contracts, Transactions, Multi-wallet
+Level 2
+	
+🟡 Yellow Belt
+	
+Multi-wallet, contracts & events, and writing contract
+Level 3
+	
+🟠 Orange Belt
+	
+Complete mini dApp + tests + Production basic + Advance contract
+﻿
+	
+Idea Submission 
+	
+Submit some unique ideas that resonate with Stellar Anchors
+Level 4
+	
+🟢 Green Belt
+	
+Build Production MVP + 10 users (test net)
+Level 5
+	
+🔵 Blue Belt
+	
+Scale to 50 Users + Add a few more features based on user feedback + Pitch + Demo
+Level 6
+	
+⚫️ Black Belt
+	
+Mainnet Launch + Audit + Real Adoption + 10 + Mainnet user & be Demo Day ready
+Level 7
+	
+🏆 Master Belt
+	
+Startup track with SCF grants and Instaward (selective projects )
+
+This is a good roadmap to see now, because it confirms the instinct from before: **Level 1 shouldn't be a throwaway demo — it should be the seed of a project you carry through Level 6+.** Let me map out how the belts connect and what that implies for your White Belt choice.
+
+## How the levels build on each other
+
+| Level | What gets added | Implication for your Level 1 pick |
+|---|---|---|
+| 1 White | Wallet, balance, single transaction | Foundation — needs to be extensible, not a dead-end toy |
+| 2 Yellow | Multi-wallet support, smart contract interaction, *writing* a contract | You'll need to introduce Soroban contracts here — so pick a Level 1 idea where a contract would plausibly add value later (e.g. escrow logic for a split-bill app, or a tipping contract with on-chain rules) |
+| 3 Orange | Full mini dApp, tests, "production basic," advanced contract logic, **and a separate idea-submission step aimed at Anchors** | This is where "ecosystem fit" gets formalized — Stellar Anchors care about on/off-ramp, payments, remittance-adjacent use cases specifically |
+| 4 Green | Real MVP + 10 testnet users | You need actual onboarding flow, not just a demo — so UX matters from Level 1 onward |
+| 5 Blue | 50 users, feature iteration from feedback, pitch/demo | Confirms you need a real narrative/problem statement early — judges are watching for a coherent story arc across levels |
+| 6 Black | Mainnet, audit, 10+ real mainnet users | Security and contract quality (flagged early as a criterion) need to have been a habit since Yellow Belt, not bolted on |
+| 7 Master | SCF grants, startup track | Only reachable if the earlier belts formed a real, fundable product |
+
+## What this means for your Level 1 decision
+
+Given the Orange Belt idea-submission step explicitly targets **Anchors** (Stellar's fiat on/off-ramp partners), the strongest long-term bet among the options discussed is **"Remit"** (a cross-border/remittance-style send tool) or **"SplitStellar"** if you frame it around group payments/expense settling — both map naturally onto anchor use cases (payments, remittances, group settlement) far better than a generic tip jar does.
+
+Concretely, I'd lean toward: **pick the idea now assuming it needs to survive through Black Belt.** That means:
+- Level 1: wallet connect + balance + send, framed around "sending money to someone else, simply" (not just "send XLM demo")
+- Level 2: add multi-wallet (Albedo/xBull alongside Freighter) and a simple Soroban contract — e.g. an escrow or split-holding contract for your payment flow
+- Level 3: turn it into a real mini dApp with tests, and when you hit the idea-submission step, pitch the remittance/group-payment angle directly to resonate with Anchors
+- Level 4+: onboarding real users becomes much easier if the core idea is "send money to people," since that's inherently shareable/testable with friends and communities
+
+Want me to sketch a concrete multi-level roadmap doc (README-style) laying out what "SplitStellar" or "Remit" would look like at each belt, so you have a north star while building Level 1?
+
+
