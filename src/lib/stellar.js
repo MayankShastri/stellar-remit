@@ -3,6 +3,7 @@ import {
   TransactionBuilder,
   Operation,
   Asset,
+  Memo,
   Networks,
   BASE_FEE
 } from "@stellar/stellar-sdk";
@@ -96,7 +97,7 @@ export async function buildPaymentTx(senderAddress, recipientAddress, amount, me
     ).setTimeout(180);
 
     if (memo && memo.trim() !== "") {
-      txBuilder = txBuilder.addMemo(Horizon.Memo.text(memo.trim()));
+      txBuilder = txBuilder.addMemo(Memo.text(memo.trim()));
     }
 
     const tx = txBuilder.build();
