@@ -54,9 +54,20 @@ export function SendForm({
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Recipient Address */}
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1.5">
-            Recipient Public Key (Stellar Address)
-          </label>
+          <div className="flex justify-between items-center mb-1.5">
+            <label className="block text-xs font-medium text-slate-300">
+              Recipient Public Key (Stellar Address)
+            </label>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setRecipient("GAIH3BFLOYL2CG42SWRJ23J3A4A4S3S4SDXJW52G6T2KXM3A23333333")}
+                className="text-[10px] text-indigo-400 hover:text-indigo-300"
+              >
+                Sample Account
+              </button>
+            </div>
+          </div>
           <div className="relative">
             <input
               type="text"
