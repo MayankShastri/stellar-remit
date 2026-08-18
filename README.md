@@ -1,108 +1,89 @@
-# 🌐 Stellar Remit — Level 1 (White Belt) Submission
+# Stellar Remit
 
-**Stellar Remit** is a lightweight, non-custodial cross-border payment web application built on the **Stellar Testnet**. It enables users to connect their Freighter wallet, check real-time XLM balances, fund accounts using Friendbot, and send fast XLM payments directly to any Stellar public key with immediate transaction verification.
+A simple, non-custodial cross-border payment dApp on Stellar Testnet. Connect a Freighter wallet, fund your account with free testnet XLM via Friendbot, and send payments to any Stellar public key with instant on-chain confirmation.
 
----
+## Problem
 
-## 🎯 Problem Statement & Strategic Scope
+Traditional cross-border remittances involve high fees, multi-day settlement, and opaque intermediary chains. Stellar settles in 3-5 seconds for sub-cent fees, but most tooling is either too technical (raw CLI/wallet usage) or too narrow (single-purpose demos). Stellar Remit starts from "send money to someone else, simply" and is built to evolve into a real remittance/group-payment tool across the Stellar Builder Challenge belt levels.
 
-Traditional cross-border remittances are plagued by high fees, slow multi-day settlements, and lack of transparency. **Stellar Remit** solves this by leveraging Stellar's fast ledger finality (3-5 seconds) and sub-cent transaction fees.
+## Features
 
-### Belt Progression Roadmap (Level 1 → Level 7)
-- **⚪️ Level 1 (White Belt):** Core wallet connection, testnet balance fetching, native payment transaction building/signing, and Horizon submission.
-- **🟡 Level 2 (Yellow Belt):** Multi-wallet support (Albedo, xBull), Soroban smart contract escrow & time-locked payments.
-- **🟠 Level 3 (Orange Belt):** Anchor integration for fiat on/off-ramps (SEP-24 / SEP-31) to target real remittance flows.
-- **🟢 Level 4–7 (Green to Master):** Production MVP on Mainnet with active user onboarding, audit, and startup track grants.
+- **Wallet Connect / Disconnect** — Freighter browser extension, testnet only
+- **XLM Balance Display** — real-time balance fetched from Horizon testnet
+- **Friendbot Faucet** — one-click testnet XLM funding for new/empty accounts
+- **Send XLM Payments** — build, sign (via Freighter), and submit native payment transactions
+- **Transaction Feedback** — success/failure modal with transaction hash and StellarExpert explorer link
+- **Recent Payments** — last 10 payment operations for the connected account
 
----
+## Tech Stack
 
-## ✨ Features & Requirements Met
+| Layer | Technology |
+|---|---|
+| Frontend | React 19, Vite 6, Tailwind CSS 4 |
+| Icons | Lucide React |
+| Wallet SDK | `@stellar/freighter-api` v6 |
+| Stellar SDK | `@stellar/stellar-sdk` v16 |
+| Network | Stellar Testnet (`https://horizon-testnet.stellar.org`) |
 
-- [x] **Wallet Setup:** Integrated with Freighter Wallet on Stellar Testnet.
-- [x] **Wallet Connection:** Connect and disconnect wallet with status indicator and address formatting.
-- [x] **Balance Handling:** Fetch real-time XLM balance via Horizon API (`https://horizon-testnet.stellar.org`).
-- [x] **Testnet Faucet:** One-click account funding via Friendbot for new/empty testnet accounts.
-- [x] **Transaction Flow:** Build, sign via Freighter extension, and submit XLM native payment operations to Horizon.
-- [x] **Transaction Feedback:** Real-time success/failure feedback displaying the base64 signed XDR, transaction hash, and direct link to StellarExpert Explorer.
-- [x] **Recent History:** Display recent payment operations for the connected account.
-
----
-
-## 🛠️ Tech Stack & Architecture
-
-- **Frontend Framework:** React 19 + Vite
-- **Styling:** Tailwind CSS v4 + Lucide Icons
-- **Wallet SDK:** `@stellar/freighter-api` (v6)
-- **Stellar SDK:** `@stellar/stellar-sdk` (v16)
-- **Network:** Stellar Testnet (`https://horizon-testnet.stellar.org`)
+## Architecture
 
 ```
-[ User Browser ]
-      │
-      ├──> [ Freighter Extension ]  ──> Signs Transaction XDR (No Private Keys Exposed)
-      │
-      └──> [ Stellar Horizon API ] ──> Reads Balances / Submits Signed Payment Tx
+[Browser] ──> [Freighter Extension] ──> Signs XDR (private keys never leave extension)
+   │
+   └──> [Stellar Horizon API] ──> Reads balances / submits signed transactions
 ```
 
----
-
-## 🚀 Local Setup Instructions
+## Setup
 
 ### Prerequisites
-1. **Node.js**: v18 or higher (v24 recommended).
-2. **Freighter Wallet Extension**: Installed in your browser ([Download Freighter](https://www.freighter.app/)).
-3. **Switch Freighter to Testnet**: Open Freighter settings -> Network -> Select **Testnet**.
 
-### Steps
+- Node.js v18+
+- [Freighter wallet extension](https://www.freighter.app/) installed in your browser
+- Freighter network set to **Testnet** (Settings > Network > Testnet)
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/stellar-remit.git
-   cd stellar-remit
-   ```
+### Install & Run
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+```bash
+git clone https://github.com/YOUR_USERNAME/stellar-remit.git
+cd stellar-remit
+npm install
+npm run dev
+```
 
-3. **Start local development server:**
-   ```bash
-   npm run dev
-   ```
+Open `http://localhost:5173` in your browser.
 
-4. **Open in browser:**
-   Navigate to `http://localhost:5173`.
+### Build for Production
 
-5. **Build for production:**
-   ```bash
-   npm run build
-   ```
+```bash
+npm run build
+```
 
----
+Output goes to `dist/`. Deploy the `dist/` folder to any static host (GitHub Pages, Vercel, Netlify).
 
-## 📸 Screenshots & Verification Checklist
+## Screenshots
 
-*(Note: Replace placeholder image paths with actual screenshots after running the app)*
+> Replace the placeholder paths below with actual screenshot files after running the app.
 
-### 1. Wallet Connected State
-![Wallet Connected](https://raw.githubusercontent.com/placeholder/stellar-remit/main/docs/screenshots/01-wallet-connected.png)
-> *Shows Freighter wallet connected with address `G...` displayed.*
+### Wallet Connected
+![Wallet Connected](docs/screenshots/01-wallet-connected.png)
 
-### 2. Balance Displayed & Friendbot Funding
-![Balance Displayed](https://raw.githubusercontent.com/placeholder/stellar-remit/main/docs/screenshots/02-balance-displayed.png)
-> *Shows live XLM balance fetched from Stellar Testnet Horizon server.*
+### Balance Displayed
+![Balance Displayed](docs/screenshots/02-balance-displayed.png)
 
-### 3. Payment Form & Freighter Signing Prompt
-![Transaction Sign Prompt](https://raw.githubusercontent.com/placeholder/stellar-remit/main/docs/screenshots/03-freighter-signing.png)
-> *Shows destination address input, XLM amount, and Freighter extension popup asking user to sign.*
+### Successful Testnet Transaction
+![Transaction Success](docs/screenshots/03-transaction-success.png)
 
-### 4. Successful Testnet Transaction & Hash Result
-![Successful Transaction](https://raw.githubusercontent.com/placeholder/stellar-remit/main/docs/screenshots/04-transaction-success.png)
-> *Shows transaction result modal with confirmed transaction hash and StellarExpert Explorer link.*
+### Transaction Result Shown to User
+![Transaction Result](docs/screenshots/04-transaction-result.png)
 
----
+## What's Next
 
-## 📄 License
+Built as part of the Stellar Journey to Mastery builder program. Current belt: **Level 1 (White Belt)**.
 
-MIT License — free for use in the Stellar ecosystem.
+- **Level 2 (Yellow Belt):** Multi-wallet support (Albedo, xBull), first Soroban smart contract (escrow/split-holding logic)
+- **Level 3 (Orange Belt):** Full mini dApp with tests, production hardening, Anchor-facing idea pitch for remittance/group settlement
+- **Level 4+:** Production MVP, user onboarding, mainnet launch
+
+## License
+
+MIT
