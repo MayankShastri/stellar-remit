@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { RefreshCw, Coins, PlusCircle, ExternalLink, Copy, Check } from "lucide-react";
+import React from "react";
+import { RefreshCw, Coins, PlusCircle, ExternalLink } from "lucide-react";
 
 export function BalanceCard({
   address,
@@ -9,14 +9,6 @@ export function BalanceCard({
   onRefresh,
   onFund,
 }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    if (!address) return;
-    navigator.clipboard.writeText(address);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
   return (
     <div className="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6 relative overflow-hidden backdrop-blur-sm">
       {/* Background Glow */}
@@ -47,22 +39,9 @@ export function BalanceCard({
           <span className="text-lg font-semibold text-indigo-400">XLM</span>
         </div>
         {address && (
-          <div className="flex items-center gap-2 mt-1">
-            <p className="text-xs text-slate-400 font-mono truncate">
-              {address}
-            </p>
-            <button
-              onClick={handleCopy}
-              className="p-1 text-slate-400 hover:text-indigo-300 transition-colors shrink-0"
-              title="Copy public key"
-            >
-              {copied ? (
-                <Check className="w-3.5 h-3.5 text-emerald-400" />
-              ) : (
-                <Copy className="w-3.5 h-3.5" />
-              )}
-            </button>
-          </div>
+          <p className="text-xs text-slate-400 mt-1 font-mono truncate">
+            {address}
+          </p>
         )}
       </div>
 
