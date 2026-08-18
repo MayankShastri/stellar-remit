@@ -1,13 +1,32 @@
-import React from "react";
+import React, { useEffect, useCallback } from "react";
 import { CheckCircle2, XCircle, ExternalLink, X } from "lucide-react";
 
 export function TransactionStatus({ txResult, onClose }) {
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Escape") onClose();
+    },
+    [onClose]
+  );
+
+  useEffect(() => {
+    if (txResult) {
+      document.addEventListener("keydown", handleKeyDown);
+      return () => document.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [txResult, handleKeyDown]);
+
   if (!txResult) return null;
 
   const { success, hash, error } = txResult;
 
   return (
-    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fadeIn">
+    <div
+      className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fadeIn"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
       <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
         <button
           onClick={onClose}
