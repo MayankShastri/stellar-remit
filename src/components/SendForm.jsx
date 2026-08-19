@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Send, AlertCircle, ArrowRight, UserCheck } from "lucide-react";
+import { Send, ArrowRight, UserCheck, ShieldCheck } from "lucide-react";
+import { CornerBrackets } from "./CornerBrackets";
 
 export function SendForm({
   address,
@@ -12,27 +13,44 @@ export function SendForm({
   const [amount, setAmount] = useState("");
   const [memo, setMemo] = useState("");
 
+  const parsedBalance = parseFloat(balance) || 0;
+
+  const handleQuickAmount = (fraction) => {
+    const maxAvailable = Math.max(0, parsedBalance - 1);
+    if (fraction === 1) {
+      setAmount(maxAvailable > 0 ? maxAvailable.toFixed(4) : "0");
+    } else {
+      setAmount((maxAvailable * fraction).toFixed(4));
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!address) {
-      onError("Please connect your wallet first.");
+      onError("Please connect your Freighter wallet first.");
       return;
     }
 
     const trimmedRecipient = recipient.trim();
-    if (!trimmedRecipient || !trimmedRecipient.startsWith("G") || trimmedRecipient.length !== 56) {
-      onError("Please enter a valid Stellar public key starting with 'G' (56 characters).");
+    if (
+      !trimmedRecipient ||
+      !trimmedRecipient.startsWith("G") ||
+      trimmedRecipient.length !== 56
+    ) {
+      onError(
+        "Please enter a valid 56-character Stellar public key starting with 'G'."
+      );
       return;
     }
 
     const parsedAmount = parseFloat(amount);
     if (isNaN(parsedAmount) || parsedAmount <= 0) {
-      onError("Please enter a valid positive XLM amount.");
+      onError("Please specify a positive XLM payment amount.");
       return;
     }
 
-    if (parsedAmount > parseFloat(balance)) {
+    if (parsedAmount > parsedBalance) {
       onError(`Insufficient XLM balance. Available: ${balance} XLM.`);
       return;
     }
@@ -44,48 +62,78 @@ export function SendForm({
     });
   };
 
+  const isValidPublicKey =
+    recipient.trim().startsWith("G") && recipient.trim().length === 56;
+
   return (
-    <div className="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6 backdrop-blur-sm">
-      <div className="flex items-center gap-2 mb-6">
-        <Send className="w-5 h-5 text-indigo-400" />
-        <h3 className="text-base font-semibold text-white">Send XLM Payment</h3>
+    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#070707]/80 p-6 sm:p-8">
+      <CornerBrackets className="border-white/20" />
+
+      <div className="relative z-10 flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <span className="size-1.5 rounded-full bg-white/70" />
+          <span className="font-mono text-xs font-semibold uppercase tracking-[0.18rem] text-zinc-400">
+            02 / Payment Dispatcher
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5 text-zinc-500 font-mono text-[11px]">
+          <ShieldCheck className="w-3.5 h-3.5 text-zinc-400" />
+          <span>Non-Custodial</span>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Recipient Address */}
+      <form onSubmit={handleSubmit} className="relative z-10 space-y-5">
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1.5">
-            Recipient Public Key (Stellar Address)
-          </label>
-          <div className="relative">
-            <input
-              type="text"
-              value={recipient}
-              onChange={(e) => setRecipient(e.target.value)}
-              placeholder="G..."
-              disabled={!address || isSending}
-              className="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 transition-colors disabled:opacity-50"
-            />
-            {recipient.startsWith("G") && recipient.length === 56 && (
-              <UserCheck className="w-4 h-4 text-emerald-400 absolute right-3 top-3" />
+          <div className="flex items-center justify-between mb-2">
+            <label className="font-mono text-xs uppercase tracking-[0.14rem] text-zinc-400">
+              Recipient Stellar Address
+            </label>
+            {isValidPublicKey && (
+              <span className="inline-flex items-center gap-1 font-mono text-[11px] text-emerald-400">
+                <UserCheck className="w-3.5 h-3.5" />
+                Valid G-Key
+              </span>
             )}
           </div>
+          <input
+            type="text"
+            value={recipient}
+            onChange={(e) => setRecipient(e.target.value)}
+            placeholder="e.g. GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"
+            disabled={!address || isSending}
+            className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-mono text-white placeholder:text-zinc-600 outline-none transition-all duration-150 hover:border-white/20 focus:border-white/40 focus:ring-1 focus:ring-white/10 disabled:opacity-40"
+          />
         </div>
 
-        {/* Amount */}
         <div>
-          <div className="flex justify-between items-center mb-1.5">
-            <label className="block text-xs font-medium text-slate-300">
-              Amount (XLM)
+          <div className="flex items-center justify-between mb-2">
+            <label className="font-mono text-xs uppercase tracking-[0.14rem] text-zinc-400">
+              Payment Amount
             </label>
             {address && (
-              <button
-                type="button"
-                onClick={() => setAmount((parseFloat(balance) - 1 > 0 ? parseFloat(balance) - 1 : 0).toString())}
-                className="text-[10px] text-indigo-400 hover:text-indigo-300 font-medium"
-              >
-                Max ({Math.max(0, parseFloat(balance) - 1).toFixed(2)} XLM)
-              </button>
+              <div className="flex items-center gap-1.5 font-mono text-[10px]">
+                <button
+                  type="button"
+                  onClick={() => handleQuickAmount(0.25)}
+                  className="rounded-md border border-white/10 bg-white/[0.03] px-2 py-0.5 text-zinc-400 hover:border-white/30 hover:bg-white/[0.08] hover:text-white transition-colors"
+                >
+                  25%
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleQuickAmount(0.5)}
+                  className="rounded-md border border-white/10 bg-white/[0.03] px-2 py-0.5 text-zinc-400 hover:border-white/30 hover:bg-white/[0.08] hover:text-white transition-colors"
+                >
+                  50%
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleQuickAmount(1)}
+                  className="rounded-md border border-white/15 bg-white/[0.06] px-2 py-0.5 text-zinc-300 hover:border-white/40 hover:bg-white/[0.12] hover:text-white transition-colors font-medium"
+                >
+                  MAX
+                </button>
+              </div>
             )}
           </div>
           <div className="relative">
@@ -95,45 +143,55 @@ export function SendForm({
               min="0.0000001"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="0.00"
+              placeholder="0.0000"
               disabled={!address || isSending}
-              className="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 transition-colors disabled:opacity-50"
+              className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-mono text-white placeholder:text-zinc-600 outline-none transition-all duration-150 hover:border-white/20 focus:border-white/40 focus:ring-1 focus:ring-white/10 disabled:opacity-40"
             />
-            <span className="absolute right-3 top-2.5 text-xs font-semibold text-slate-400">XLM</span>
+            <span className="absolute right-4 top-3 font-mono text-xs text-zinc-500 font-medium">
+              XLM
+            </span>
           </div>
         </div>
 
-        {/* Optional Memo */}
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1.5">
-            Memo <span className="text-slate-500 font-normal">(Optional)</span>
-          </label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="font-mono text-xs uppercase tracking-[0.14rem] text-zinc-400">
+              Transaction Memo
+            </label>
+            <span className="font-mono text-[10px] text-zinc-600">
+              {memo.length}/28 bytes · optional
+            </span>
+          </div>
           <input
             type="text"
             value={memo}
             onChange={(e) => setMemo(e.target.value)}
-            placeholder="e.g. Dinner split, Invoice #102"
+            placeholder="e.g. invoice-4092 or remittance"
             maxLength={28}
             disabled={!address || isSending}
-            className="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 transition-colors disabled:opacity-50"
+            className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-zinc-600 outline-none transition-all duration-150 hover:border-white/20 focus:border-white/40 focus:ring-1 focus:ring-white/10 disabled:opacity-40"
           />
         </div>
 
-        {/* Submit Button */}
+        <div className="rounded-md border border-white/10 bg-white/[0.02] p-3.5 text-xs font-mono flex items-center justify-between text-zinc-400">
+          <span>Estimated Network Fee</span>
+          <span className="text-zinc-200">0.00001 XLM (100 stroops)</span>
+        </div>
+
         <button
           type="submit"
           disabled={!address || isSending}
-          className="w-full mt-2 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-700 text-white font-semibold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20 transition-all disabled:text-slate-400 disabled:shadow-none"
+          className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-white/30 bg-white px-5 py-3.5 text-sm font-semibold font-mono text-[#030303] transition-all duration-300 hover:bg-zinc-200 disabled:opacity-40 disabled:pointer-events-none active:scale-[0.99]"
         >
           {isSending ? (
             <>
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-              <span>Signing & Submitting Transaction...</span>
+              <div className="size-4 rounded-full border-2 border-zinc-400 border-t-[#030303] animate-spin" />
+              <span>Signing via Freighter...</span>
             </>
           ) : (
             <>
-              <span>Send XLM via Freighter</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>Sign &amp; Submit Payment</span>
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
             </>
           )}
         </button>

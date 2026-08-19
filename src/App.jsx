@@ -1,11 +1,13 @@
 import React from "react";
 import { useStellarWallet } from "./hooks/useStellarWallet";
+import { CanvasBackground } from "./components/CanvasBackground";
+import { CornerBrackets } from "./components/CornerBrackets";
 import { WalletConnect } from "./components/WalletConnect";
 import { BalanceCard } from "./components/BalanceCard";
 import { SendForm } from "./components/SendForm";
 import { TransactionStatus } from "./components/TransactionStatus";
 import { RecentTransactions } from "./components/RecentTransactions";
-import { Globe, AlertCircle, ShieldCheck, Zap } from "lucide-react";
+import { AlertCircle, ArrowRight } from "lucide-react";
 
 export default function App() {
   const {
@@ -29,25 +31,41 @@ export default function App() {
   } = useStellarWallet();
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-indigo-500 selection:text-white">
-      {/* Top Header / Navigation */}
-      <header className="border-b border-slate-800/80 bg-slate-900/50 backdrop-blur-md sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
-              <Globe className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-base font-bold tracking-tight text-white">Stellar Remit</h1>
-                <span className="text-[10px] uppercase font-semibold tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                  Testnet
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400 hidden sm:block">
-                Simple cross-border XLM payments on Stellar
-              </p>
-            </div>
+    <div className="relative min-h-screen bg-[#030303] text-white flex flex-col selection:bg-white/20 selection:text-white antialiased">
+      <CanvasBackground />
+
+      <a
+        href="#console"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[#030303]"
+      >
+        Skip to content
+      </a>
+
+      {/* Floating Nav */}
+      <header className="fixed left-0 right-0 top-4 sm:top-5 z-50 px-4">
+        <nav
+          className="mx-auto flex max-w-6xl items-center justify-between rounded-xl border border-white/10 bg-[#070707]/80 p-1.5 backdrop-blur-xl"
+          aria-label="Primary navigation"
+        >
+          <a
+            href="#home"
+            className="group flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 transition-all duration-300 hover:border-white/30 hover:bg-white/[0.08]"
+          >
+            <span className="grid size-7 place-items-center rounded-md bg-white text-[#030303] text-xs font-bold font-mono tracking-tighter">
+              SR
+            </span>
+            <span className="text-sm font-medium tracking-tight text-white">
+              Stellar Remit
+            </span>
+          </a>
+
+          <div className="hidden items-center gap-1 md:flex">
+            <a
+              href="#console"
+              className="rounded-lg px-3 py-2 text-xs font-medium font-mono text-white bg-white/10 border border-white/15 transition-all duration-300 hover:bg-white/15"
+            >
+              Console
+            </a>
           </div>
 
           <WalletConnect
@@ -57,142 +75,174 @@ export default function App() {
             onConnect={connect}
             onDisconnect={disconnect}
           />
-        </div>
+        </nav>
       </header>
 
-      {/* Error Alert */}
-      {error && (
-        <div className="max-w-6xl mx-auto px-4 mt-4 w-full">
-          <div className="bg-rose-950/50 border border-rose-800/60 rounded-xl p-3.5 flex items-center justify-between text-rose-200 text-xs">
-            <div className="flex items-center gap-2.5">
-              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
-              <span>{error}</span>
-            </div>
-            <button
-              onClick={() => setError(null)}
-              className="text-rose-400 hover:text-white text-xs font-semibold underline ml-4"
-            >
-              Dismiss
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Main Content */}
-      <main className="flex-1 max-w-6xl mx-auto px-4 py-8 w-full">
+      <main id="main" className="relative z-10 flex-1">
         {/* Hero Section */}
-        <div className="mb-8 bg-gradient-to-r from-slate-900 via-slate-900/90 to-indigo-950/40 border border-slate-800 rounded-3xl p-6 md:p-8 relative overflow-hidden">
-          <div className="max-w-2xl">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
-              Send XLM Anywhere on Stellar Testnet
-            </h2>
-            <p className="text-xs md:text-sm text-slate-300 leading-relaxed mb-6">
-              Connect your Freighter wallet, request free testnet XLM via Friendbot, and submit fast native payment transactions directly to the Stellar Horizon network.
-            </p>
+        <section id="home" className="relative px-4 pt-28 sm:pt-32 pb-6">
+          <div className="mx-auto max-w-6xl rounded-2xl border border-white/10 bg-[#030303]/40 p-6 backdrop-blur-md sm:p-8 lg:p-12 relative">
+            <CornerBrackets className="border-white/30" />
 
-            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400">
-              <div className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>Non-custodial (Freighter)</span>
+            <div className="relative z-10 text-center max-w-3xl mx-auto py-8 sm:py-12">
+              <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3 py-1.5 text-xs font-semibold font-mono uppercase tracking-[0.18rem] text-zinc-300">
+                <span className="size-1.5 rounded-full bg-white animate-pulse-subtle" />
+                Stellar Testnet · Non-Custodial
               </div>
-              <div className="flex items-center gap-1.5">
-                <Zap className="w-4 h-4 text-amber-400" />
-                <span>Sub-second settlement</span>
+
+              <h1 className="max-w-3xl mx-auto text-5xl font-bold leading-[0.98] tracking-tighter text-white sm:text-6xl md:text-7xl">
+                Send XLM anywhere on Stellar
+              </h1>
+
+              <p className="mt-7 max-w-xl mx-auto text-base leading-7 text-zinc-400 sm:text-lg">
+                Connect your Freighter wallet, request testnet XLM, and submit payment operations on the Stellar network. Non-custodial, open-source, auditable.
+              </p>
+
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row justify-center">
+                <a
+                  href="#console"
+                  className="group relative inline-flex items-center justify-center overflow-hidden rounded-full border border-white/30 bg-white px-6 py-3.5 text-sm font-semibold text-[#030303] transition-all duration-300 hover:bg-zinc-200 active:translate-y-0"
+                >
+                  <span className="relative flex items-center gap-2">
+                    Launch Console
+                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
+                </a>
               </div>
-              <div className="flex items-center gap-1.5">
-                <Globe className="w-4 h-4 text-indigo-400" />
-                <span>Horizon API</span>
+
+              <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-lg mx-auto text-left">
+                <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Step 01</p>
+                  <p className="mt-1 text-xs text-zinc-300 font-medium">Connect Freighter</p>
+                </div>
+                <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Step 02</p>
+                  <p className="mt-1 text-xs text-zinc-300 font-medium">Fund with Friendbot</p>
+                </div>
+                <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Step 03</p>
+                  <p className="mt-1 text-xs text-zinc-300 font-medium">Sign & submit XLM</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Core Layout Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Column: Balance & Send Form */}
-          <div className="lg:col-span-7 space-y-6">
-            <BalanceCard
-              address={address}
-              balance={balance}
-              isRefreshing={isRefreshingBalance}
-              isFunding={isFunding}
-              onRefresh={refreshBalance}
-              onFund={fundAccount}
-            />
-
-            <SendForm
-              address={address}
-              balance={balance}
-              isSending={isSending}
-              onSendPayment={sendPayment}
-              onError={setError}
-            />
-          </div>
-
-          {/* Right Column: History & Guide */}
-          <div className="lg:col-span-5 space-y-6">
-            <RecentTransactions
-              address={address}
-              payments={recentPayments}
-            />
-
-            {/* How it Works / Educational Sidebar */}
-            <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 text-xs space-y-3">
-              <h4 className="font-semibold text-slate-200">How Stellar Remit Works</h4>
-              <ol className="list-decimal list-inside text-slate-400 space-y-2 leading-relaxed">
-                <li>
-                  <strong className="text-slate-300">Connect:</strong> Link your Freighter wallet extension set to Stellar Testnet.
-                </li>
-                <li>
-                  <strong className="text-slate-300">Fund:</strong> Use the Friendbot button to receive free testnet XLM.
-                </li>
-                <li>
-                  <strong className="text-slate-300">Build & Sign:</strong> Enter a recipient address (G...) and amount. Freighter prompts you to sign the transaction XDR.
-                </li>
-                <li>
-                  <strong className="text-slate-300">Verify:</strong> View the submitted transaction hash on StellarExpert.
-                </li>
-              </ol>
+        {/* Error Alert */}
+        {error && (
+          <div className="max-w-6xl mx-auto px-4 mb-6 w-full">
+            <div className="relative overflow-hidden rounded-xl bg-[#0a0a0a]/90 border border-red-500/40 p-4 flex items-center justify-between backdrop-blur-md animate-slideDown">
+              <CornerBrackets className="border-red-500/30" />
+              <div className="flex items-center gap-3 relative z-10">
+                <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                <span className="font-mono text-xs text-zinc-200">{error}</span>
+              </div>
+              <button
+                onClick={() => setError(null)}
+                className="relative z-10 font-mono text-zinc-500 hover:text-white text-xs font-medium ml-4 transition-colors duration-150"
+              >
+                Dismiss
+              </button>
             </div>
           </div>
-        </div>
+        )}
+
+        {/* Console Section */}
+        <section id="console" className="px-4 py-8">
+          <div className="max-w-6xl mx-auto">
+            <TransactionStatus txResult={txResult} onClose={clearTxResult} />
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="space-y-8">
+                <BalanceCard
+                  address={address}
+                  balance={balance}
+                  isRefreshing={isRefreshingBalance}
+                  isFunding={isFunding}
+                  onRefresh={refreshBalance}
+                  onFund={fundAccount}
+                />
+                <SendForm
+                  address={address}
+                  balance={balance}
+                  isSending={isSending}
+                  onSendPayment={sendPayment}
+                  onError={setError}
+                />
+              </div>
+
+              <div>
+                <RecentTransactions
+                  address={address}
+                  payments={recentPayments}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
-      {/* Transaction Status Modal */}
-      <TransactionStatus
-        txResult={txResult}
-        onClose={clearTxResult}
-      />
-
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-slate-900/30 py-6 text-center text-xs text-slate-500">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p>Stellar Remit — Built for Stellar Builder Challenge Level 1 (White Belt)</p>
-          <div className="flex items-center gap-4 text-slate-400">
-            <a
-              href="https://developers.stellar.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-indigo-400 transition-colors"
-            >
-              Stellar Docs
-            </a>
-            <a
-              href="https://www.freighter.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-indigo-400 transition-colors"
-            >
-              Freighter
-            </a>
-            <a
-              href="https://stellar.expert/explorer/testnet"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-indigo-400 transition-colors"
-            >
-              Explorer
-            </a>
+      <footer className="relative z-10 px-4 pb-6 pt-4">
+        <div className="mx-auto max-w-6xl rounded-2xl border border-white/10 bg-[#050505]/80 p-6 sm:p-8">
+          <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr_1fr]">
+            <div>
+              <div className="flex items-center gap-3">
+                <span className="grid size-8 place-items-center rounded-md bg-white text-[#030303] text-xs font-bold font-mono tracking-tighter">
+                  SR
+                </span>
+                <span className="text-lg font-medium tracking-tight text-white">
+                  Stellar Remit
+                </span>
+              </div>
+              <p className="mt-4 max-w-sm text-sm leading-6 text-zinc-500">
+                Non-custodial cross-border payment dispatcher built for the Stellar Builder Challenge. Powered by Freighter API and Stellar SDK.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-mono text-xs font-semibold uppercase tracking-[0.16rem] text-zinc-500">
+                Resources
+              </h3>
+              <div className="mt-4 space-y-3 text-sm text-zinc-400">
+                <a href="https://developers.stellar.org/" target="_blank" rel="noopener noreferrer" className="block transition-colors hover:text-white">
+                  Stellar Developers
+                </a>
+                <a href="https://www.freighter.app/" target="_blank" rel="noopener noreferrer" className="block transition-colors hover:text-white">
+                  Freighter Wallet
+                </a>
+                <a href="https://stellar.expert/explorer/testnet" target="_blank" rel="noopener noreferrer" className="block transition-colors hover:text-white">
+                  StellarExpert
+                </a>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-mono text-xs font-semibold uppercase tracking-[0.16rem] text-zinc-500">
+                App
+              </h3>
+              <div className="mt-4 space-y-3 text-sm text-zinc-400">
+                <a href="#console" className="block transition-colors hover:text-white">
+                  Console
+                </a>
+                <a href="#home" className="block transition-colors hover:text-white">
+                  Back to Top
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 flex flex-col justify-between gap-4 border-t border-white/10 pt-6 font-mono text-xs text-zinc-600 sm:flex-row">
+            <p>© 2026 Stellar Remit · Stellar Builder Challenge</p>
+            <div className="flex gap-4">
+              <a href="https://stellar.org" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-zinc-300">
+                Stellar.org
+              </a>
+              <a href="https://github.com/MayankShastri/stellar-remit" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-zinc-300">
+                GitHub
+              </a>
+            </div>
           </div>
         </div>
       </footer>

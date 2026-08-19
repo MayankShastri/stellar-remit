@@ -1,5 +1,5 @@
-import React from "react";
-import { Wallet, LogOut, Download, AlertCircle } from "lucide-react";
+import React, { useState } from "react";
+import { Wallet, LogOut, Download, AlertCircle, Check, Copy } from "lucide-react";
 
 export function WalletConnect({
   address,
@@ -8,71 +8,79 @@ export function WalletConnect({
   onConnect,
   onDisconnect,
 }) {
+  const [copied, setCopied] = useState(false);
+
   const formatAddress = (addr) => {
     if (!addr) return "";
     return `${addr.substring(0, 6)}...${addr.substring(addr.length - 6)}`;
   };
 
+  const handleCopy = () => {
+    if (!address) return;
+    navigator.clipboard.writeText(address);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   if (!isInstalled) {
     return (
-      <div className="bg-amber-900/30 border border-amber-500/50 rounded-xl p-4 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3 text-amber-200">
-          <AlertCircle className="w-6 h-6 text-amber-400 shrink-0" />
-          <div>
-            <h4 className="font-semibold text-sm">Freighter Wallet Not Detected</h4>
-            <p className="text-xs text-amber-300/80">
-              Install the Freighter browser extension to interact with Stellar Testnet.
-            </p>
-          </div>
+      <div className="flex items-center gap-3 rounded-lg border border-white/15 bg-zinc-900/90 px-3.5 py-2 text-xs backdrop-blur-md">
+        <div className="flex items-center gap-2 text-zinc-300">
+          <AlertCircle className="w-4 h-4 text-zinc-400 shrink-0" />
+          <span className="font-mono text-xs hidden sm:inline text-zinc-300">
+            Freighter extension required
+          </span>
         </div>
         <a
           href="https://www.freighter.app/"
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-amber-500 hover:bg-amber-400 text-slate-950 px-4 py-2 rounded-lg font-medium text-xs flex items-center gap-1.5 transition-colors shrink-0"
+          className="inline-flex items-center gap-1.5 rounded-md border border-white/20 bg-white text-[#030303] font-mono font-medium px-3 py-1 text-xs transition-all duration-200 hover:bg-zinc-200"
         >
-          <Download className="w-4 h-4" />
-          Install Freighter
+          <Download className="w-3.5 h-3.5" />
+          Install
         </a>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
-          <Wallet className="w-5 h-5" />
-        </div>
-        <div>
-          <h2 className="text-sm font-medium text-slate-400">Wallet Connection</h2>
-          {address ? (
-            <p className="text-xs font-mono text-emerald-400 flex items-center gap-1.5 mt-0.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              {formatAddress(address)}
-            </p>
-          ) : (
-            <p className="text-xs text-slate-500 mt-0.5">Not connected</p>
-          )}
-        </div>
-      </div>
-
+    <div className="flex items-center gap-2 sm:gap-3">
       {address ? (
-        <button
-          onClick={onDisconnect}
-          className="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium flex items-center gap-1.5 transition-colors"
-        >
-          <LogOut className="w-3.5 h-3.5" />
-          Disconnect
-        </button>
+        <>
+          <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-mono backdrop-blur-md">
+            <span className="size-2 rounded-full bg-emerald-400 animate-pulse-subtle shrink-0" />
+            <span className="text-zinc-300">{formatAddress(address)}</span>
+            <button
+              onClick={handleCopy}
+              className="ml-1 p-1 text-zinc-500 hover:text-white transition-colors duration-150"
+              title="Copy full public key"
+            >
+              {copied ? (
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+              ) : (
+                <Copy className="w-3.5 h-3.5" />
+              )}
+            </button>
+          </div>
+
+          <button
+            onClick={onDisconnect}
+            className="group inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-mono text-zinc-400 transition-all duration-200 hover:border-white/25 hover:bg-white/[0.08] hover:text-white"
+            title="Disconnect wallet"
+          >
+            <LogOut className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-300 transition-colors" />
+            <span className="hidden sm:inline">Disconnect</span>
+          </button>
+        </>
       ) : (
         <button
           onClick={onConnect}
           disabled={isConnecting}
-          className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-600/50 text-white text-xs font-semibold flex items-center gap-2 shadow-lg shadow-indigo-600/20 transition-all"
+          className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-white/30 bg-white px-4 py-2 text-xs font-semibold font-mono text-[#030303] transition-all duration-300 hover:bg-zinc-200 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]"
         >
-          <Wallet className="w-4 h-4" />
-          {isConnecting ? "Connecting..." : "Connect Freighter"}
+          <Wallet className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-6" />
+          <span>{isConnecting ? "Connecting..." : "Connect Wallet"}</span>
         </button>
       )}
     </div>
