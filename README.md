@@ -2,10 +2,6 @@
 
 A simple, non-custodial cross-border payment dApp on Stellar Testnet. Connect a Freighter wallet, fund your account with free testnet XLM via Friendbot, and send payments to any Stellar public key with instant on-chain confirmation.
 
-## Problem
-
-Traditional cross-border remittances involve high fees, multi-day settlement, and opaque intermediary chains. Stellar settles in 3-5 seconds for sub-cent fees, but most tooling is either too technical (raw CLI/wallet usage) or too narrow (single-purpose demos). Stellar Remit starts from "send money to someone else, simply" and is built to evolve into a real remittance/group-payment tool across the Stellar Builder Challenge belt levels.
-
 ## Features
 
 - **Wallet Connect / Disconnect** — Freighter browser extension, testnet only
@@ -25,14 +21,6 @@ Traditional cross-border remittances involve high fees, multi-day settlement, an
 | Stellar SDK | `@stellar/stellar-sdk` v16 |
 | Network | Stellar Testnet (`https://horizon-testnet.stellar.org`) |
 
-## Architecture
-
-```
-[Browser] ──> [Freighter Extension] ──> Signs XDR (private keys never leave extension)
-   │
-   └──> [Stellar Horizon API] ──> Reads balances / submits signed transactions
-```
-
 ## Setup
 
 ### Prerequisites
@@ -44,7 +32,7 @@ Traditional cross-border remittances involve high fees, multi-day settlement, an
 ### Install & Run
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/stellar-remit.git
+git clone https://github.com/MayankShastri/stellar-remit.git
 cd stellar-remit
 npm install
 npm run dev
@@ -58,30 +46,26 @@ Open `http://localhost:5173` in your browser.
 npm run build
 ```
 
-Output goes to `dist/`. Deploy the `dist/` folder to any static host (GitHub Pages, Vercel, Netlify).
-
 ## Screenshots
 
-> Replace the placeholder paths below with actual screenshot files after running the app.
-
 ### Wallet Connected
-![Wallet Connected](docs/screenshots/01-wallet-connected.png)
+![Wallet Connected](docs/screenshots/Wallet%20Connected.png)
 
 ### Balance Displayed
-![Balance Displayed](docs/screenshots/02-balance-displayed.png)
+![Balance Displayed](docs/screenshots/Balance%20Displayed.png)
 
 ### Successful Testnet Transaction
-![Transaction Success](docs/screenshots/03-transaction-success.png)
+![Transaction Success](docs/screenshots/Successful%20Testnet%20Transaction.png)
 
 ### Transaction Result Shown to User
-![Transaction Result](docs/screenshots/04-transaction-result.png)
+![Transaction Result](docs/screenshots/Transaction%20Result%20Shown%20to%20User.png)
 
 ## What's Next
 
 Built as part of the Stellar Journey to Mastery builder program. Current belt: **Level 1 (White Belt)**.
 
-- **Level 2 (Yellow Belt):** Multi-wallet support (Albedo, xBull), first Soroban smart contract (escrow/split-holding logic)
-- **Level 3 (Orange Belt):** Full mini dApp with tests, production hardening, Anchor-facing idea pitch for remittance/group settlement
+- **Level 2 (Yellow Belt):** Multi-wallet support, Soroban smart contract ([stellar-remit-crowdfund](https://github.com/MayankShastri/stellar-remit-crowdfund))
+- **Level 3 (Orange Belt):** Full mini dApp with tests, production hardening
 - **Level 4+:** Production MVP, user onboarding, mainnet launch
 
 ## License

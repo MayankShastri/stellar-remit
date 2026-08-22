@@ -1,20 +1,2 @@
-node_modules
-dist
-.DS_Store
-*.local
-
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 graft/
-
-# White Belt build artifacts
-White Belt/node_modules/
-White Belt/dist/
-White Belt/graft/
-
-# Yellow Belt (has its own .git repo)
-Yellow Belt/.git/
-Yellow Belt/node_modules/
-Yellow Belt/target/
-Yellow Belt/dist/
-Yellow Belt/contracts/*/target/
-Yellow Belt/contracts/*/test_snapshots/
